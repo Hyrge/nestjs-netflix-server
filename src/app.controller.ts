@@ -33,20 +33,23 @@ export class AppController {
 
   @Post()
   createMovie(@Body() body: { title: string }) {
-    this.movies.push({
+    const movie = {
       id: this.movies.length + 1,
       title: body.title,
-    });
-    return this.movies;
+    }
+    this.movies.push(movie);
+    return movie;
   }
 
+
   @Patch(':id')
-  updateMovie(@Param('id', ParseIntPipe) id: number, @Body() body: { title: string }) {
+  updateMovie(@Param('id', ParseIntPipe) id: number, @Body('title') title: string) {
     const movie = this.movies.find(m => m.id === id);
     if (!movie) {
       throw new NotFoundException(`Movie with ID ${id} not found`);
     }
-    movie.title = body.title;
+    
+    Object.assign(movie, { title });
     return movie;
   
   }
@@ -58,7 +61,7 @@ export class AppController {
       throw new NotFoundException(`Movie with ID ${id} not found`);
     }
     this.movies.splice(movieIdx, 1);
-    return movieIdx
+    return movieIdx;
   } 
   
   
