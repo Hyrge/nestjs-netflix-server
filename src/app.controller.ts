@@ -43,15 +43,17 @@ export class AppController {
 
 
   @Patch(':id')
-  updateMovie(@Param('id', ParseIntPipe) id: number, @Body('title') title: string) {
+  updateMovie(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('title') title: string
+  ) {
     const movie = this.movies.find(m => m.id === id);
     if (!movie) {
-      throw new NotFoundException(`Movie with ID ${id} not found`);
+      throw new NotFoundException(`Movie with ID ${id} not founㅇd`);
     }
     
     Object.assign(movie, { title });
     return movie;
-  
   }
 
   @Delete(':id')
