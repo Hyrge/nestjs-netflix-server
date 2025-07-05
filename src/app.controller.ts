@@ -19,27 +19,17 @@ export class AppController {
 
   @Get()
   getMovies(@Query('title') title?: string) {
-    if(!title) return this.movies;
-    return this.movies.filter(m => m.title.includes(title))
+    return this.appService.getManymovies(title)
   }
 
   @Get(':id')
   getMovie(@Param('id', ParseIntPipe) id: number) {
-    const movie = this.movies.find(m => m.id === id);
-    if (!movie) {
-      throw new NotFoundException(`Movie with ID ${id} not found`);
-    }
-    return movie;
+    return this.appService.getMovieById(id)
   }
 
   @Post()
   createMovie(@Body() body: { title: string }) {
-    const movie = {
-      id: this.movies.length + 1,
-      title: body.title,
-    }
-    this.movies.push(movie);
-    return movie;
+    return this.appService.createMovie(body.title)
   }
 
 
@@ -48,23 +38,12 @@ export class AppController {
     @Param('id', ParseIntPipe) id: number,
     @Body('title') title: string
   ) {
-    const movie = this.movies.find(m => m.id === id);
-    if (!movie) {
-      throw new NotFoundException(`Movie with ID ${id} not founㅇd`);
-    }
-    
-    Object.assign(movie, { title });
-    return movie;
+    return this.appService.updateMovie(id, title)
   }
 
   @Delete(':id')
   deleteMovie(@Param('id', ParseIntPipe) id: number) {
-    const movieIdx = this.movies.findIndex(m => m.id === id);
-    if (movieIdx === -1) {
-      throw new NotFoundException(`Movie with ID ${id} not found`);
-    }
-    this.movies.splice(movieIdx, 1);
-    return movieIdx;
+    return this.appService.deleteMovie(id)
   } 
   
   
