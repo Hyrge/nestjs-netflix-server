@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, NotFoundException, Query } from '@nestjs/common';
 import { ParseIntPipe } from '@nestjs/common';
 import { AppService } from './app.service';
 
@@ -18,8 +18,9 @@ export class AppController {
 
 
   @Get()
-  getMovies() {
-    return this.movies;
+  getMovies(@Query('title') title?: string) {
+    if(!title) return this.movies;
+    return this.movies.filter(m => m.title.includes(title))
   }
 
   @Get(':id')
